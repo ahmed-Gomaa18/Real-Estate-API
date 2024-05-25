@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  app:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      ports:
+        - '3000:3000'
+      env_file:
+        - .env
+      container_name: realEstateApi
+      depends_on:
+        - mongodb
+
+
+  mongodb:
+      image: mongo
+      restart: always
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+        MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+      container_name: mongoDB
+      ports:
+        - '${DB_PORT}:27017'
+      volumes:
+        - mongo-data:/data/db
+
+volumes:
+  mongo-data:
