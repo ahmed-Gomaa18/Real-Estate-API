@@ -13,6 +13,35 @@ import { CreateAdDto } from 'src/dtos/ad.dto';
 export class AdController {
   constructor(private readonly adService: AdService) {};
 
+  @Get()
+  @ApiQuery({ name: "q", type: String, required: false})
+  @ApiQuery({ name: "limit", type: Number, required: false})
+  @ApiQuery({ name: "page", type: Number, required: false})
+  @ApiQuery({ name: "area", type: Number, required: false})
+  @ApiQuery({ name: "price", type: Number, required: false})
+  async getPropertyRequests(
+    @Query('q') query: string, 
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 5,
+    @Query('area') area: number,
+    @Query('price') price: number,
+    @Res() res: Response
+  ){
+    try{
+      const filters: any = {};
+
+      if (area) filters.are = area;
+      if (price) filters.price = price;
+
+      const result = await this.adService.getAds(query, +page, +limit, filters);
+
+      return res.status(200).json(result);
+
+    }catch(error){
+      return res.status(400).json({error: error.message});
+    };
+  };
+
   @Post('/create')
   @ApiBody({
     description: 'This endpoint allow only Agent to create ads',

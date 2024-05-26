@@ -1,73 +1,108 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Real-Estate-APIs Project
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is a NestJS project built with TypeScript, using MongoDb as the database and Mongoose as the ODM.This Real Estate Project that allow client to create property requests and agent create ads and find the ads that be matched with requests and allow admin to control this flow 
+ The project is organized into three main modules:
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+1. **Property Request Module**
+2. **ad Module**
+3. **Auth Module**
 
-## Description
+## Project Setup
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
 
-```bash
-$ npm install
-```
+1. **Clone the repository**:
+   ```bash
+   git clone <repository_url>
+   cd <repository_directory>
+2. **Make sure you have docker installed on your computer then run**:
+   ```bash
+   docker-compose up
+3. **You will find in repo realestate folder use it to restore the backup**:
+   ```bash
+   mongorestore --uri="mongodb://root:root@mongodb:27017/realestate?authSource=admin" --out /yourPath/realestate
 
-## Running the app
+## Modules
+---
 
-```bash
-# development
-$ npm run start
+### Property Request Module
+---
+>This module allow only Client to Create Property Requests.
 
-# watch mode
-$ npm run start:dev
+### Create
 
-# production mode
-$ npm run start:prod
-```
+**Endpoint**: **POST /propertyRequest/create**
 
-## Test
+***Description***: `Create Property Requests this endpoint allowed for Client Only`
 
-```bash
-# unit tests
-$ npm run test
+### Update
+**Endpoint**: **PATCH /propertyRequest/update{propertyRequestId}**
 
-# e2e tests
-$ npm run test:e2e
+***Description***: `update Property Requests this endpoint allowed for Client Only`
 
-# test coverage
-$ npm run test:cov
-```
+### Get All propertyRequests
+**Endpoint**: **GET /propertyRequest**
 
-## Support
+***Description***: `Retrieve propertyRequests with options for search, filte, and pagination`
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Get matches ads
+**Endpoint**: **GET /propertyRequest/{propertyRequestId}/matches**
 
-## Stay in touch
+***Description***: `Retrieve matches ads By {propertyRequestId}`
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
 
-Nest is [MIT licensed](LICENSE).
+
+### Ad Module
+---
+>This module allow only Agent to Create Ads.
+
+### Create
+
+**Endpoint**: **POST /ad/create**
+
+***Description***: `Create Ads this endpoint allowed for Agent Only`
+
+### Get All Ads
+**Endpoint**: **GET /ad**
+
+***Description***: `Retrieve Ads with options for search, filte, and pagination`
+
+### Get matches propertyRequests
+**Endpoint**: **GET /ad/{adId}/matches**
+
+***Description***: `Retrieve propertyRequests ads By {adId}`
+
+
+### Auth Module
+---
+>This module handles user registration and authentication.
+
+### Get User Stats:
+**Endpoint**: 
+**GET /auth/userStats**
+
+***Description:*** `Allow Only Admins to get report about user Stats at all app`
+
+### Register:
+**Endpoint**: **POST /auth/register**
+***Description:*** `Register a new user.`
+
+### Login:
+**Endpoint**: 
+**POST /auth/login**
+
+***Description:*** `Authenticate a user and provide an access token.`
+
+### Guarded Endpoints:
+>protect some endpoint by guards to ensure only authenticated users can access them.
+
+### validation Pipes:
+>adding pipes for most endpoint to validate data before enter to controller or interact with DB
+
+### API Documentation
+>Swagger: http://hos:3000/api
+
+
+Ensure your install docker in your computer
+Kindly, Find attached `realestate` Folder, `users.txt` File to login or  register with new account

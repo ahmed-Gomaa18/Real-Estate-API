@@ -11,6 +11,44 @@ import { propertyRequestModelName, propertyRequestType } from "../propertyReques
 export class AdService {
     constructor(@InjectModel(adModelName) private readonly adModel: Model<adType>, @InjectModel(propertyRequestModelName) private readonly propertyRequestModel: Model<propertyRequestType>){}
 
+    async getAds(query: string, page: number, limit: number, filters: any){
+        const offset = (page - 1) * limit;
+
+        const searchCriteria = {...filters};
+        // check if user enter query search return query search else return all
+        if(query){
+            searchCriteria.$or = [
+                { propertyType: new RegExp(query, 'i') },
+                { city: new RegExp(query, 'i') },
+                { district: new RegExp(query, 'i') },
+                { description: new RegExp(query, 'i') }
+            ];
+        };
+
+        const [data, total] = await Promise.all([
+            this.adModel.find(searchCriteria)
+                .skip(offset)
+                .limit(limit)
+                .exec(),
+            this.adModel.countDocuments(searchCriteria).exec()
+        ]);
+
+        // Determine pagination metadata
+        const hasNextPage = (page * limit) < total;
+        const hasPreviousPage = page > 1;
+
+        return {
+            page,
+            data,
+            totalData: data.length,
+            totalPage: Math.ceil(total / limit),
+            hasNextPage,
+            hasPreviousPage
+        };
+
+
+    };
+
     async createAd(ad: CreateAdDto){
 
         const newAd = new this.adModel(ad);

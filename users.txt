@@ -1,0 +1,20 @@
+Admin
+phone: 01056789012
+password: 01111111111
+
+
+Agent
+phone: 01067890123
+password: 12345678
+
+phone: 01001234567
+password: 12345678
+
+
+
+client
+phone: 01012345678
+password: 12345678
+
+phone: 01056789012
+password: 12345678
